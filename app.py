@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from pathlib import Path
 from argparse import ArgumentParser, Namespace
 from chris_plugin import chris_plugin
@@ -18,3 +20,7 @@ parser.add_argument('-e', '--example', default='jelly',
 )
 def main(options: Namespace, inputdir: Path, outputdir: Path):
     print(f'Option: {options.example}')
+
+
+if __name__ == '__main__':
+    main()
