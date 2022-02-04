@@ -12,6 +12,32 @@ For a more comprehensive boilerplate, use
 
 https://github.com/fnndsc/cookiecutter-chrisapp
 
+## How to Use This Template
+
+1. Click "Use this template"
+2. Clone the newly created repository
+3. Replace placeholder text
+
+```shell
+function replace () {
+  find . -type f -not -path '*/\.*/*' -not -path '*/\venv/*' -exec sed -i -e "s/$1/$2/" '{}' \;
+}
+
+replace commandname my_command_name
+replace pl-appname pl-my-plugin-name
+replace fnndsc my_username
+```
+
+### Template Examples
+
+Here are some good, complete examples of _ChRIS_ plugins created from this template.
+
+- https://github.com/FNNDSC/pl-nums2mask
+- https://github.com/FNNDSC/pl-nii2mnc-u8
+
+Advanced users can `cp -rv .github/workflows` into their own repositories to enable
+automatic builds.
+
 ## Abstract
 
 PROGRAMNAME is a [_ChRIS_](https://chrisproject.org/)
@@ -29,7 +55,7 @@ singularity exec docker://fnndsc/pl-appname commandname [--args values...] input
 ```shell
 mkdir incoming/ outgoing/
 mv some.dat other.dat incoming/
-singularity exec docker://fndsc/pl-appname:latest commandname [--args] incoming/ outgoing/
+singularity exec docker://fnndsc/pl-appname:latest commandname [--args] incoming/ outgoing/
 ```
 
 ## Development
