@@ -1,1 +1,1 @@
-chris_plugin~=0.0.7
+chris_plugin~=0.0.9
