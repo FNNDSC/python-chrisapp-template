@@ -20,7 +20,7 @@ https://github.com/fnndsc/cookiecutter-chrisapp
 
 ```shell
 function replace () {
-  find . -type f -not -path '*/\.*/*' -not -path '*/\venv/*' -exec sed -i -e "s/$1/$2/" '{}' \;
+  find . -type f -not -path '*/\.*/*' -not -path '*/\venv/*' -exec sed -i -e "s/$1/$2/g" '{}' \;
 }
 
 replace commandname my_command_name
