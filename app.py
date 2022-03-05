@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 from pathlib import Path
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, Namespace, ArgumentDefaultsHelpFormatter
 from chris_plugin import chris_plugin
 
-parser = ArgumentParser(description='cli description')
+parser = ArgumentParser(description='cli description',
+                        formatter_class=ArgumentDefaultsHelpFormatter)
 parser.add_argument('-e', '--example', default='jelly',
                     help='argument which does not do anything')
 
