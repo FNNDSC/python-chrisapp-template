@@ -5,7 +5,7 @@ FROM docker.io/python:3.10.2-slim-buster
 
 LABEL org.opencontainers.image.authors="FNNDSC <dev@babyMRI.org>" \
       org.opencontainers.image.title="ChRIS Plugin Title" \
-      org.opencontainers.image.description="A ChRIS ds plugin that..."
+      org.opencontainers.image.description="A ChRIS plugin that..."
 
 WORKDIR /usr/local/src/app
 

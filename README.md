@@ -1,56 +1,92 @@
-# _ChRIS_ ds Plugin Template
+# _ChRIS_ Plugin Template
 
-<!--
-[![Version](https://img.shields.io/docker/v/fnndsc/pl-appname?sort=semver)](https://hub.docker.com/r/fnndsc/pl-appname)
-[![MIT License](https://img.shields.io/github/license/fnndsc/pl-appname)](https://github.com/FNNDSC/pl-appname/blob/main/LICENSE)
-[![Build](https://github.com/FNNDSC/pl-appname/actions/workflows/ci.yml/badge.svg)](https://github.com/FNNDSC/pl-appname/actions)
--->
+This is a minimal template repository for _ChRIS_ plugin applications in Python.
 
+## About _ChRIS_ Plugins
 
-This is a minimal template repository for _ChRIS_ _ds_ plugin applications.
-For a more comprehensive boilerplate, use
+A _ChRIS_ plugin is a scientific data-processing software which can run anywhere all-the-same:
+in the cloud via a [web app](https://github.com/FNNDSC/ChRIS_ui/), or on your own laptop
+from the terminal. They are easy to build and easy to understand: most simply, a
+_ChRIS_ plugin is a command-line program which processes data from an input directory
+and creates data to an output directory with the usage
+`commandname [options...] inputdir/ outputdir/`.
 
-https://github.com/fnndsc/cookiecutter-chrisapp
+For more information, visit our website https://chrisproject.org
 
 ## How to Use This Template
 
-1. Click "Use this template"
-2. Clone the newly created repository
-3. Replace placeholder text
+Go to https://github.com/FNNDSC/python-chrisapp-template and click "Use this template".
+The newly created repository is ready to use right away.
 
-```shell
-function replace () {
-  find . -type f -not -path '*/\.*/*' -not -path '*/\venv/*' -exec sed -i -e "s/$1/$2/g" '{}' \;
-}
+A script `bootstrap.sh` is provided to help fill in and rename values for your new project.
+It is optional to use.
 
-replace commandname my_command_name
-replace pl-appname pl-my-plugin-name
-replace fnndsc my_username
-```
+1. Edit the variables in `bootstrap.sh`
+2. Run `./bootstrap.sh`
+3. Follow the instructions it will print out
 
-### Template Examples
+## Example Plugins
 
 Here are some good, complete examples of _ChRIS_ plugins created from this template.
 
 - https://github.com/FNNDSC/pl-nums2mask
 - https://github.com/FNNDSC/pl-nii2mnc-u8
+- https://github.com/FNNDSC/pl-dcm2niix
 
-Advanced users can `cp -rv .github/workflows` into their own repositories to enable
-automatic builds.
+## What's Inside
 
-## Abstract
+| Path                       | Purpose                                                                                                                                                                                                  |
+|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `app.py`                   | main script                                                                                                                                                                                              |
+| `setup.py`                 | [Python project metadata and installation script](https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/#setup-py)                                                        |
+| `requirements.txt`         | List of Python dependencies                                                                                                                                                                              |
+| `Dockerfile`               | [Container image build recipe](https://docs.docker.com/engine/reference/builder/)                                                                                                                        |
+| `.github/workflows/ci.yml` | "continuous integration" using [Github Actions](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions): automatic testing, building, and uploads to https://chrisstore.co |
 
-PROGRAMNAME is a [_ChRIS_](https://chrisproject.org/)
+
+<!-- BEGIN README TEMPLATE
+
+# ChRIS Plugin Title
+
+[![Version](https://img.shields.io/docker/v/fnndsc/pl-appname?sort=semver)](https://hub.docker.com/r/fnndsc/pl-appname)
+[![MIT License](https://img.shields.io/github/license/fnndsc/pl-appname)](https://github.com/FNNDSC/pl-appname/blob/main/LICENSE)
+[![ci](https://github.com/FNNDSC/pl-appname/actions/workflows/ci.yml/badge.svg)](https://github.com/FNNDSC/pl-appname/actions/workflows/ci.yml)
+
+`pl-appname` is a [_ChRIS_](https://chrisproject.org/)
 _ds_ plugin which takes in ...  as input files and
 creates ... as output files.
 
-## Usage
+## Abstract
+
+...
+
+## Installation
+
+`pl-appname` is a _[ChRIS](https://chrisproject.org/) plugin_, meaning it can
+run from either within _ChRIS_ or the command-line.
+
+[![Get it from chrisstore.co](https://ipfs.babymri.org/ipfs/QmaQM9dUAYFjLVn3PpNTrpbKVavvSTxNLE5BocRCW1UoXG/light.png)](https://chrisstore.co/plugin/pl-appname)
+
+## Local Usage
+
+To get started with local command-line usage, use [Apptainer](https://apptainer.org/)
+(a.k.a. Singularity) to run `pl-appname` as a container:
 
 ```shell
 singularity exec docker://fnndsc/pl-appname commandname [--args values...] input/ output/
 ```
 
+To print its available options, run:
+
+```shell
+singularity exec docker://fnndsc/pl-appname commandname --help
+```
+
 ## Examples
+
+`commandname` requires two positional arguments: a directory containing
+input data, and a directory where to create output data.
+First, create the input directory and move input data into it.
 
 ```shell
 mkdir incoming/ outgoing/
@@ -60,7 +96,11 @@ singularity exec docker://fnndsc/pl-appname:latest commandname [--args] incoming
 
 ## Development
 
+Instructions for developers.
+
 ### Building
+
+Build a local container image:
 
 ```shell
 docker build -t localhost/fnndsc/pl-appname .
@@ -68,11 +108,16 @@ docker build -t localhost/fnndsc/pl-appname .
 
 ### Get JSON Representation
 
+Run [`chris_plugin_info`](https://github.com/FNNDSC/chris_plugin#usage)
+to produce a JSON description of this plugin, which can be uploaded to a _ChRIS Store_.
+
 ```shell
-docker run --rm localhost/fnndsc/pl-appname chris_plugin_info > MyProgram.json
+docker run --rm localhost/fnndsc/pl-appname chris_plugin_info > chris_plugin_info.json
 ```
 
 ### Local Test Run
+
+Mount the source code `app.py` into a container to test changes without rebuild.
 
 ```shell
 docker run --rm -it --userns=host -u $(id -u):$(id -g) \
@@ -80,3 +125,4 @@ docker run --rm -it --userns=host -u $(id -u):$(id -g) \
     -v $PWD/in:/incoming:ro -v $PWD/out:/outgoing:rw -w /outgoing \
     localhost/fnndsc/pl-appname commandname /incoming /outgoing
 ```
+END README TEMPLATE -->
