@@ -14,6 +14,10 @@ DESCRIPTION='A ChRIS plugin to do something awesome'
 ORGANIZATION='FNNDSC'
 EMAIL='dev@babyMRI.org'
 
+# automatic testing, building, and release
+# https://github.com/FNNDSC/cookiecutter-chrisapp/wiki/Automatic-Builds
+ENABLE_CI=yes
+
 # Step 2. Uncomment the line below.
 
 #READY=yes
@@ -89,6 +93,9 @@ replace_in_all commandname "$SCRIPT_NAME"
 replace_in_all pl-appname "$PLUGIN_NAME"
 replace_in_all 'dev@babyMRI.org' "$EMAIL"
 replace_in_all FNNDSC "$ORGANIZATION"
+
+# .github/
+sed -i -e '/CI disabled by default, delete this line/d' .github/workflows/ci.yml
 
 # replace "/" with "\/" in string
 function escape_slashes () {
@@ -180,6 +187,7 @@ fi
 source venv/bin/activate
 verb pip install -r requirements.txt
 verb pip install -e .
+verb pip install pytest
 
 tput bold
 >&2 printf '\n%s\n\n' '✨Done!✨'
