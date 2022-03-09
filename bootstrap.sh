@@ -111,6 +111,7 @@ sed -e'/^# ChRIS Plugin Title$/'\{ -e:1 -en\;b1 -e\} -ed README.md \
   | sed "s/^# ChRIS Plugin Title\$/# $escaped_title/" \
   | sed '/^END README TEMPLATE -->$/d' \
   | sed "s/fnndsc/${ORGANIZATION,,}/g" \
+  | sed "s/app\\.py/$SCRIPT_NAME.py/g" \
   > $temp_file
 mv $temp_file README.md
 
