@@ -7,7 +7,7 @@
 
 # Step 1. Change these values to your liking.
 
-PLUGIN_NAME='pl-appname'
+PLUGIN_NAME="$(basename $(dirname $(realpath $0)))"
 PLUGIN_TITLE='My ChRIS Plugin'
 SCRIPT_NAME='commandname'
 DESCRIPTION='A ChRIS plugin to do something awesome'
