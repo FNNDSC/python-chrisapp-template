@@ -3,17 +3,18 @@
 #
 # - automatically run pytest
 # - on push to main, build and push container images as ":latest"
-# - on tag, build and push container images with tag
-# - on release, upload plugin description to https://chrisstore.co
+# - on release, build and push container image with tag and
+#   upload plugin description to https://chrisstore.co
 
 name: build
 
 on:
   push:
     branches: [ main ]
-    tags: [ '**' ]
   pull_request:
     branches: [ main ]
+  release:
+    types: [ created ]
 
 jobs:
   test:
@@ -152,7 +153,7 @@ jobs:
           repository: ${{ steps.determine.outputs.repo }}
 
       - name: Upload to ChRIS Store
-        if: "github.event_name == 'release' && !endsWith(steps.determine.outputs.dock_image, ':latest')"
+        if: github.event_name == 'release'
         uses: FNNDSC/chrisstore-action@master
         with:
           descriptor_file: /tmp/description.json
