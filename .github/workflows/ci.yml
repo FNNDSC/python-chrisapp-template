@@ -41,7 +41,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       - name: Install testing dependencies
-        run:
+        run: |
           docker run --name=install_test localhost/local/app:latest pip install pytest
           docker commit install_test localhost/local/app:tester
           docker rm install_test
