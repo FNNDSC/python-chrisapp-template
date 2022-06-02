@@ -1,7 +1,7 @@
 # Python version can be changed, e.g.
 # FROM python:3.8
 # FROM docker.io/fnndsc/conda:python3.10.2-cuda11.6.0
-FROM docker.io/python:3.10.2-slim-buster
+FROM docker.io/python:3.10.4-slim-buster
 
 LABEL org.opencontainers.image.authors="FNNDSC <dev@babyMRI.org>" \
       org.opencontainers.image.title="ChRIS Plugin Title" \
