@@ -21,7 +21,7 @@ parser = ArgumentParser(description='cli description',
 parser.add_argument('-e', '--example', default='jelly',
                     help='argument which does not do anything')
 parser.add_argument('-V', '--version', action='version',
-                    version=f'$(prog)s {__version__}')
+                    version=f'%(prog)s {__version__}')
 
 
 # documentation: https://fnndsc.github.io/chris_plugin/chris_plugin.html#chris_plugin
