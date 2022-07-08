@@ -1,1 +1,1 @@
-chris_plugin==0.0.17
+chris_plugin==0.1.0
