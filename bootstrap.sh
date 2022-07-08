@@ -15,7 +15,7 @@ ORGANIZATION='FNNDSC'
 EMAIL='dev@babyMRI.org'
 
 # automatic testing, building, and release
-# https://github.com/FNNDSC/cookiecutter-chrisapp/wiki/Automatic-Builds
+# https://github.com/FNNDSC/python-chrisapp-template/wiki/Continuous-Integration#use-ci
 ENABLE_CI=yes
 
 # Step 2. Uncomment the line below.
@@ -187,8 +187,7 @@ fi
 >&2 echo + source venv/bin/activate
 source venv/bin/activate
 verb pip install -r requirements.txt
-verb pip install -e .
-verb pip install pytest
+verb pip install -e '.[dev]'
 
 tput bold
 >&2 printf '\n%s\n\n' '✨Done!✨'

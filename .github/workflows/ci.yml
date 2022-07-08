@@ -1,10 +1,10 @@
 # Continuous integration testing for ChRIS Plugin.
-# https://github.com/FNNDSC/cookiecutter-chrisapp/wiki/Automatic-Builds
+# https://github.com/FNNDSC/python-chrisapp-template/wiki/Continuous-Integration
 #
-# - automatically run pytest
-# - on push to main, build and push container images as ":latest"
-# - on release, build and push container image with tag and
-#   upload plugin description to https://chrisstore.co
+# - on push, release, and PR: run pytest
+# - on push to main: build and push container images as ":latest"
+# - on release: build and push container image with tag and
+#               upload plugin description to https://chrisstore.co
 
 name: build
 
@@ -20,10 +20,10 @@ jobs:
   test:
     name: Unit tests
     if: false  # CI disabled by default, delete this line to enable CI
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: docker/setup-buildx-action@v1
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
@@ -32,29 +32,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
       - name: Build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
+          build-args: extras_require=dev
           context: .
           load: true
           push: false
-          tags: "localhost/local/app:latest"
+          tags: "localhost/local/app:dev"
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-      - name: Install testing dependencies
-        run: |
-          docker run --name=install_test localhost/local/app:latest pip install pytest
-          docker commit install_test localhost/local/app:tester
-          docker rm install_test
       - name: Run pytest
         run: |
-          docker run -v "$GITHUB_WORKSPACE:/app:ro" -w /app localhost/local/app:tester \
+          docker run -v "$GITHUB_WORKSPACE:/app:ro" -w /app localhost/local/app:dev \
             pytest -o cache_dir=/tmp/pytest
 
   build:
     name: Build
     needs: [ test ]  # tests must pass before build
     if: github.event_name == 'push' || github.event_name == 'release'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     # A local registry helps us reuse the built image between steps
     services:
@@ -111,7 +107,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2 
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
