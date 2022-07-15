@@ -29,15 +29,15 @@ It is optional to use.
 
 Here are some good, complete examples of _ChRIS_ plugins created from this template.
 
-- https://github.com/FNNDSC/pl-nums2mask
-- https://github.com/FNNDSC/pl-nii2mnc-u8
-- https://github.com/FNNDSC/pl-dcm2niix
+- https://github.com/FNNDSC/pl-dcm2niix (basic command example)
+- https://github.com/FNNDSC/pl-mri-preview (uses [NiBabel](https://nipy.org/nibabel/))
+- https://github.com/FNNDSC/pl-fetal-cp-surface-extract (example using Python package project structure)
 
 ## What's Inside
 
 | Path                       | Purpose                                                                                                                                                                                                  |
 |----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `app.py`                   | Main script: Start editing here                                                                                                                                                                                             |
+| `app.py`                   | Main script: start editing here!                                                                                                                                                                         |
 | `tests/`                   | Unit tests                                                                                                                                                                                               |
 | `setup.py`                 | [Python project metadata and installation script](https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/#setup-py)                                                        |
 | `requirements.txt`         | List of Python dependencies                                                                                                                                                                              |
