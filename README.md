@@ -37,7 +37,7 @@ Here are some good, complete examples of _ChRIS_ plugins created from this templ
 
 | Path                       | Purpose                                                                                                                                                                                                  |
 |----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `app.py`                   | main script                                                                                                                                                                                              |
+| `app.py`                   | Main script: Start editing here                                                                                                                                                                                             |
 | `tests/`                   | Unit tests                                                                                                                                                                                               |
 | `setup.py`                 | [Python project metadata and installation script](https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/#setup-py)                                                        |
 | `requirements.txt`         | List of Python dependencies                                                                                                                                                                              |
