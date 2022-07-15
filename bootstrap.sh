@@ -5,24 +5,25 @@
 # CONFIGURATION
 # ========================================
 
-# Step 1. Change these values to your liking.
+# STEP 1. Change these values to your liking.
 
-PLUGIN_NAME="$(basename $(dirname $(realpath $0)))"
+PLUGIN_NAME="$(basename $(dirname $(realpath $0)))"  # name of current directory
 PLUGIN_TITLE='My ChRIS Plugin'
 SCRIPT_NAME='commandname'
 DESCRIPTION='A ChRIS plugin to do something awesome'
 ORGANIZATION='FNNDSC'
 EMAIL='dev@babyMRI.org'
 
-# automatic testing, building, and release
+# Enables automatic testing, building, and release.
+# You are advised to review the file .github/workflows/ci.yml
 # https://github.com/FNNDSC/python-chrisapp-template/wiki/Continuous-Integration#use-ci
 ENABLE_CI=yes
 
-# Step 2. Uncomment the line below.
+# STEP 2. Uncomment the line below.
 
 #READY=yes
 
-# Step 3. Run: ./bootstrap.sh
+# STEP 3. Run: ./bootstrap.sh
 
 if ! [ "$READY" = 'yes' ]; then
   >&2 echo "error: you are not READY."
