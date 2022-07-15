@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import sys
 from pathlib import Path
 from argparse import ArgumentParser, Namespace, ArgumentDefaultsHelpFormatter
 from importlib.metadata import Distribution
@@ -34,8 +33,8 @@ parser.add_argument('-V', '--version', action='version',
     min_gpu_limit=0              # set min_gpu_limit=1 to enable GPU
 )
 def main(options: Namespace, inputdir: Path, outputdir: Path):
-    print(DISPLAY_TITLE, file=sys.stderr)
-    print(f'Option: {options.example}', file=sys.stderr)
+    print(DISPLAY_TITLE)
+    print(f'Option: {options.example}')
 
     output_file = outputdir / 'success.txt'
     output_file.write_text('did nothing successfully!')
@@ -43,4 +42,3 @@ def main(options: Namespace, inputdir: Path, outputdir: Path):
 
 if __name__ == '__main__':
     main()
-

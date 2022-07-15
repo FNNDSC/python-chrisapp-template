@@ -18,12 +18,7 @@ def test_main(mocker, tmp_path: Path):
 
     mock_print = mocker.patch('builtins.print')
     main(options, inputdir, outputdir)
-
-    expected_print_calls = [
-        call(DISPLAY_TITLE, file=sys.stderr),
-        call("Option: bar", file=sys.stderr)
-    ]
-    mock_print.assert_has_calls(expected_print_calls)
+    mock_print.assert_has_calls([call(DISPLAY_TITLE), call("Option: bar")])
 
     expected_output_file = outputdir / 'success.txt'
     assert expected_output_file.exists()
