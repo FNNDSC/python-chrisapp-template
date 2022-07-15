@@ -175,6 +175,11 @@ inject_figleted_title "$figleted_title" \
   > "$SCRIPT_NAME.py"
 rm app.py
 
+# tests/
+for test_file in tests/*.py; do
+  sed "s/from app import/from $SCRIPT_NAME import/" $test_file > $temp_file
+  mv $temp_file $test_file
+done
 
 # ========================================
 # SETUP

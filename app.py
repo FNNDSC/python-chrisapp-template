@@ -18,7 +18,7 @@ ChRIS Plugin Template Title
 
 parser = ArgumentParser(description='cli description',
                         formatter_class=ArgumentDefaultsHelpFormatter)
-parser.add_argument('-e', '--example', default='jelly',
+parser.add_argument('-e', '--example', default='foo',
                     help='argument which does not do anything')
 parser.add_argument('-V', '--version', action='version',
                     version=f'%(prog)s {__version__}')
@@ -36,6 +36,9 @@ parser.add_argument('-V', '--version', action='version',
 def main(options: Namespace, inputdir: Path, outputdir: Path):
     print(DISPLAY_TITLE, file=sys.stderr)
     print(f'Option: {options.example}', file=sys.stderr)
+
+    output_file = outputdir / 'success.txt'
+    output_file.write_text('did nothing successfully!')
 
 
 if __name__ == '__main__':
