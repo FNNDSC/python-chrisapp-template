@@ -107,18 +107,9 @@ Build a local container image:
 docker build -t localhost/fnndsc/pl-appname .
 ```
 
-### Get JSON Representation
+### Running
 
-Run [`chris_plugin_info`](https://github.com/FNNDSC/chris_plugin#usage)
-to produce a JSON description of this plugin, which can be uploaded to a _ChRIS Store_.
-
-```shell
-docker run --rm localhost/fnndsc/pl-appname chris_plugin_info > chris_plugin_info.json
-```
-
-### Local Test Run
-
-Mount the source code `app.py` into a container to test changes without rebuild.
+Mount the source code `app.py` into a container to try out changes without rebuild.
 
 ```shell
 docker run --rm -it --userns=host -u $(id -u):$(id -g) \
@@ -126,4 +117,43 @@ docker run --rm -it --userns=host -u $(id -u):$(id -g) \
     -v $PWD/in:/incoming:ro -v $PWD/out:/outgoing:rw -w /outgoing \
     localhost/fnndsc/pl-appname commandname /incoming /outgoing
 ```
+
+### Testing
+
+Run unit tests using `pytest`.
+It's recommended to rebuild the image to ensure that sources are up-to-date.
+Use the option `--build-arg extras_require=dev` to install extra dependencies for testing.
+
+```shell
+docker build -t localhost/fnndsc/pl-appname:dev --build-arg extras_require=dev .
+docker run --rm -it localhost/fnndsc/pl-appname:dev pytest
+```
+
+## Release
+
+Steps for release can be automated by [Github Actions](.github/workflows/ci.yml).
+This section is about how to do those steps manually.
+
+### Increase Version Number
+
+Increase the version number in `setup.py` and commit this file.
+
+### Push Container Image
+
+Build and push an image tagged by the version. For example, for version `1.2.3`:
+
+```
+docker build -t docker.io/fnndsc/pl-appname:1.2.3 .
+docker push docker.io/fnndsc/pl-appname:1.2.3
+```
+
+### Get JSON Representation
+
+Run [`chris_plugin_info`](https://github.com/FNNDSC/chris_plugin#usage)
+to produce a JSON description of this plugin, which can be uploaded to a _ChRIS Store_.
+
+```shell
+docker run --rm localhost/fnndsc/pl-appname:dev chris_plugin_info > chris_plugin_info.json
+```
+
 END README TEMPLATE -->
