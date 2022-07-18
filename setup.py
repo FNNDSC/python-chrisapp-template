@@ -10,7 +10,6 @@ setup(
     py_modules=['app'],
     install_requires=['chris_plugin'],
     license='MIT',
-    python_requires='>=3.8.2',
     entry_points={
         'console_scripts': [
             'commandname = app:main'
