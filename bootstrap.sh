@@ -14,10 +14,11 @@ DESCRIPTION='A ChRIS plugin to do something awesome'
 ORGANIZATION='FNNDSC'
 EMAIL='dev@babyMRI.org'
 
-# Enables automatic testing, building, and release.
+# Continuous integration: automatically test and build your code.
 # You are advised to review the file .github/workflows/ci.yml
 # https://github.com/FNNDSC/python-chrisapp-template/wiki/Continuous-Integration#use-ci
-ENABLE_CI=yes
+ENABLE_ACTIONS_TEST=yes
+ENABLE_ACTIONS_BUILD=yes
 
 # STEP 2. Uncomment the line below.
 
@@ -96,7 +97,14 @@ replace_in_all 'dev@babyMRI.org' "$EMAIL"
 replace_in_all FNNDSC "$ORGANIZATION"
 
 # .github/
-sed -i -e '/CI disabled by default, delete this line/d' .github/workflows/ci.yml
+if [ "${ENABLE_ACTIONS_TEST,,}" = 'yes' ]; then
+  sed -i -e '/delete this line to enable automatic testing/d' .github/workflows/ci.yml
+fi
+
+if [ "${ENABLE_ACTIONS_BUILD,,}" = 'yes' ]; then
+  sed -i -e '/delete this line and uncomment the line below to enable automatic builds/d' .github/workflows/ci.yml
+  sed -i -e 's/# *if: github\.event_name/if: github\.event_name/' .github/workflows/ci.yml
+fi
 
 # replace "/" with "\/" in string
 function escape_slashes () {
