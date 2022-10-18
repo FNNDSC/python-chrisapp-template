@@ -33,6 +33,12 @@ parser.add_argument('-V', '--version', action='version',
     min_gpu_limit=0              # set min_gpu_limit=1 to enable GPU
 )
 def main(options: Namespace, inputdir: Path, outputdir: Path):
+    """
+    :param options: non-positional arguments parsed by the parser given to @chris_plugin
+    :param inputdir: directory containing input files (read-only)
+    :param outputdir: directory where to write output files
+    """
+
     print(DISPLAY_TITLE)
 
     output_file = outputdir / f'{options.name}.txt'
