@@ -26,6 +26,10 @@ ENABLE_ACTIONS_BUILD=yes
 
 # STEP 3. Run: ./bootstrap.sh
 
+if [ "$(uname -o 2> /dev/null)" != 'GNU/Linux' ]; then
+  >&2 echo "error: this script only works on GNU/Linux."
+fi
+
 if ! [ "$READY" = 'yes' ]; then
   >&2 echo "error: you are not READY."
   exit 1
