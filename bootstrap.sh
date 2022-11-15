@@ -159,6 +159,7 @@ sed "s/name='.*'/name='$appname_without_prefix'/" setup.py \
   | sed "s/py_modules=\['app'\]/py_modules=['$SCRIPT_NAME']/" \
   | sed "s/app:main/$SCRIPT_NAME:main/" \
   | sed "s#url='.*'#url='$(guess_https_url)'#" \
+  | sed "s/app\.py/$SCRIPT_NAME.py/" \
   > $temp_file
 mv $temp_file setup.py
 
