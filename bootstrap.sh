@@ -208,25 +208,32 @@ source venv/bin/activate
 verb pip install -r requirements.txt
 verb pip install -e '.[dev]'
 
-tput bold
->&2 printf '\n%s\n\n' '✨Done!✨'
-tput sgr0
 
-tput setaf 3
+if [ -z "$TERM" ]; then
+  tput=tput
+else
+  tput=true
+fi
+
+$tput bold
+>&2 printf '\n%s\n\n' '✨Done!✨'
+$tput sgr0
+
+$tput setaf 3
 >&2 echo 'To undo these actions and start over, run:'
 >&2 printf '\n\t%s\n\t%s\n\t%s\n\t%s\n\n' \
     'git reset --hard' \
     'git clean -df' \
     'rm -rf venv *.egg-info' \
     "git reset 'HEAD^'"
-tput setaf 6
+$tput setaf 6
 >&2 echo 'Activate the Python virtual environment by running:'
 >&2 printf '\n\t%s\n\n' 'source venv/bin/activate'
 >&2 echo 'Save these changes by running:'
 >&2 printf '\n\t%s\n\n' 'git add -A && git commit -m "Run bootstrap.sh"'
-tput setaf 2
+$tput setaf 2
 echo 'For more information on how to get started, see README.md'
-tput sgr0
+$tput sgr0
 
 verb rm -v "$0"
 
