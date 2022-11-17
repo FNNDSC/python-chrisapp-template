@@ -16,7 +16,7 @@ def get_version(rel_path: str) -> str:
         version = next(filtered, None)
         if version is None:
             raise RuntimeError(f'Could not find __version__ in {rel_path}')
-        return version
+        return version.group(0)
 
 
 setup(
