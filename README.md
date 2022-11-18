@@ -1,5 +1,8 @@
 # _ChRIS_ Plugin Template
 
+[![test status](https://github.com/FNNDSC/python-chrisapp-template/actions/workflows/src.yml/badge.svg)](https://github.com/FNNDSC/python-chrisapp-template/actions/workflows/src.yml)
+[![MIT License](https://img.shields.io/github/license/FNNDSC/python-chrisapp-template)](LICENSE)
+
 This is a minimal template repository for _ChRIS_ plugin applications in Python.
 
 ## About _ChRIS_ Plugins
@@ -44,6 +47,18 @@ Here are some good, complete examples of _ChRIS_ plugins created from this templ
 | `Dockerfile`               | [Container image build recipe](https://docs.docker.com/engine/reference/builder/)                                                                                                                        |
 | `.github/workflows/ci.yml` | "continuous integration" using [Github Actions](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions): automatic testing, building, and uploads to https://chrisstore.co |
 
+## Contributing
+
+The source code for the `main` branch of this repository is on the
+[src](https://github.com/fnndsc/python-chrisapp-template/tree/test)
+branch, which has an additional file
+[`.github/workflows/src.yml`](https://github.com/FNNDSC/python-chrisapp-template/blob/src/.github/workflows/src.yml)
+When tests pass, changes are automatically merged into `main`.
+Developers should commit to or make pull requests targeting `src`.
+Do not push directly to `main`.
+
+This is a workaround in order to do automatic testing of this template
+without including the `.github/workflows/src.yml` file in the template itself.
 
 <!-- BEGIN README TEMPLATE
 
