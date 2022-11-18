@@ -1,0 +1,80 @@
+name: Source
+
+on:
+  push:
+    branches:
+      - src
+  pull_request:
+    branches:
+      - src
+
+jobs:
+  local:
+    name: Local test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ '3.8.2', '3.9', '3.10', '3.11' ]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Configure git
+        run: |
+          git config --global user.email "dev@babyMRI.org"
+          git config --global user.name "FNNDSC in Github Actions"
+      - name: Run ./bootstrap.sh
+        run: |
+          sed -i -e 's/#READY=yes/READY=yes/' bootstrap.sh
+          ./bootstrap.sh
+      - name: Generated unit tests
+        run: |
+          source venv/bin/activate
+          pytest
+      - name: Run program
+        run: |
+          source venv/bin/activate
+          commandname --name ghaction /tmp ./outgoing
+          
+          if ! [ -e 'outgoing/ghaction.txt' ]; then
+            echo "::error ::File outgoing/ghaaction.txt was not created."
+          fi
+
+  integration:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo not implemented
+
+  push:
+    name: Push to main
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: [ local, integration ]
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+        fetch-depth: 0
+    - name: Configure git
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+    - name: Merge ref into main
+      run: |
+        git switch main
+        git merge --no-ff --no-commit ${{ github.ref }}
+        
+        # Important! Deletes this Github workflow file
+        git rm --force .github/workflows/src.yml
+        
+        git commit --no-edit
+    - name: Push to main
+      uses: ad-m/github-push-action@552c074ed701137ebd2bf098e70c394ca293e87f
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
