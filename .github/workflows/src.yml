@@ -45,7 +45,50 @@ jobs:
     name: Integration tests
     runs-on: ubuntu-latest
     steps:
-      - run: echo not implemented
+      - uses: actions/checkout@v3
+      - name: Edit code
+        run: |
+          git config --global user.email "dev@babyMRI.org"
+          git config --global user.name "FNNDSC in Github Actions"
+
+          temp_file=$(mktemp)
+          sed 's/#READY=yes/READY=yes/' bootstrap.sh \
+            | sed 's/^PLUGIN_NAME=.*/PLUGIN_NAME=pl-ghactions-testtemplate/' \
+            | sed 's/^SCRIPT_NAME=.*/SCRIPT_NAME=ghtest_template/' \
+            | sed 's/^PLUGIN_TITLE=.*/PLUGIN_TITLE="A test in GH Actions"/' \
+            > $temp_file
+          mv $temp_file ./bootstrap.sh
+
+          ./bootstrap.sh
+
+          if ! [ -f ghtest_template.py ]; then
+            echo "::error ::File ghtest_template.py was not created."
+            exit 1
+          fi
+
+          # change the version of this ChRIS plugin
+          sed -i -e 's/^__version__ = .*/__version__ = "1.2.3"/' ghtest_template.py
+      - name: Build image
+        run: docker build -t localhost/fnndsc/pl-ghactions-testtemplate:1.2.3
+      - name: Spin up ChRIS
+        uses: FNNDSC/miniChRIS-docker@master
+        with:
+          plugins: localhost/fnndsc/pl-ghactions-testtemplate:1.2.3
+      - name: Assert plugin registered
+        run: |
+          qs='name_exact=pl-ghactions-testtemplate&version=1.2.3'
+          res="$(
+            curl -u 'chris:chris1234' \
+              -H 'Accept: application/json' \
+              "http://localhost:8000/api/v1/plugins/search/?$qs"
+          )"
+          
+          count="$(jq -r '.count' <<< "$res")"
+          if [ "$count" != '1' ]; then
+            echo "::error ::expected count=1"
+            echo "$res"
+            exit 1
+          fi
 
   push:
     name: Push to main
