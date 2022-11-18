@@ -1,8 +1,7 @@
 from setuptools import setup
 import re
 
-_version_re = re.compile(r"(?<=^__version__ = ')(.+)(?=')")
-
+_version_re = re.compile(r"(?<=^__version__ = (\"|'))(.+)(?=\"|')")
 
 def get_version(rel_path: str) -> str:
     """
