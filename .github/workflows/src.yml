@@ -95,7 +95,7 @@ jobs:
     name: Push to main
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    needs: [ local, integration ]
+    # needs: [ local, integration ]
     steps:
     - name: Git checkout
       uses: actions/checkout@v3
@@ -117,7 +117,7 @@ jobs:
 
         # ignore merge conflicts to this file
         filtered="$(sed '/CONFLICT (modify\/delete): \.github\/workflows\/src\.yml/d' <<< "$output")"
-        if ! ( echo "$filtered" | grep -Fq CONFLICT ); then
+        if ( echo "$filtered" | grep -Fq CONFLICT ); then
           echo "::error ::Unacceptable merge conflict. Someone changed main, please merge manually."
           exit 1
         fi
