@@ -109,8 +109,19 @@ jobs:
     - name: Merge ref into main
       run: |
         git switch main
-        git merge --no-ff --no-commit ${{ github.ref }}
-        
+
+        set +e
+        output="$(git merge --no-ff --no-commit ${{ github.ref }})"
+        set -e
+        echo "$output"
+
+        # ignore merge conflicts to this file
+        filtered="$(sed '/CONFLICT (modify\/delete): \.github\/workflows\/src\.yml/d' <<< "$output")"
+        if ( echo "$filtered" | grep -Fq CONFLICT ); then
+          echo "::error ::Unacceptable merge conflict. Someone changed main, please merge manually."
+          exit 1
+        fi
+
         # Important! Deletes this Github workflow file
         git rm --force .github/workflows/src.yml
         
