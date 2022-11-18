@@ -59,6 +59,7 @@ jobs:
             > $temp_file
           mv $temp_file ./bootstrap.sh
 
+          chmod +x bootstrap.sh
           ./bootstrap.sh
 
           if ! [ -f ghtest_template.py ]; then
@@ -69,7 +70,7 @@ jobs:
           # change the version of this ChRIS plugin
           sed -i -e 's/^__version__ = .*/__version__ = "1.2.3"/' ghtest_template.py
       - name: Build image
-        run: docker build -t localhost/fnndsc/pl-ghactions-testtemplate:1.2.3
+        run: docker build -t localhost/fnndsc/pl-ghactions-testtemplate:1.2.3 .
       - name: Spin up ChRIS
         uses: FNNDSC/miniChRIS-docker@master
         with:
