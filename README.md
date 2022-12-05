@@ -50,7 +50,7 @@ Here are some good, complete examples of _ChRIS_ plugins created from this templ
 ## Contributing
 
 The source code for the `main` branch of this repository is on the
-[src](https://github.com/fnndsc/python-chrisapp-template/tree/test)
+[src](https://github.com/fnndsc/python-chrisapp-template/tree/src)
 branch, which has an additional file
 [`.github/workflows/src.yml`](https://github.com/FNNDSC/python-chrisapp-template/blob/src/.github/workflows/src.yml)
 When tests pass, changes are automatically merged into `main`.
