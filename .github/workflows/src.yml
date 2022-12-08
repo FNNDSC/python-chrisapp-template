@@ -123,8 +123,10 @@ jobs:
         fi
 
         # Important! Deletes this Github workflow file
-        git rm --force .github/workflows/src.yml
-        
+        if [ -e .github/workflows/src.yml ]; then
+          git rm --force .github/workflows/src.yml
+        fi
+
         git commit --no-edit
     - name: Push to main
       uses: ad-m/github-push-action@552c074ed701137ebd2bf098e70c394ca293e87f
