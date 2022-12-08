@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 # bootstrap.sh: customize python-chrisapp-template with project details
+#
+# WARNING: This script is for advanced users only! Do not proceed
+# unless you understand what this does. New developers would find
+# it easier to use python-chrisapp-template as is. Simply ignore
+# and optionally delete this file.
 
 # ========================================
 # CONFIGURATION
@@ -14,9 +19,12 @@ DESCRIPTION='A ChRIS plugin to do something awesome'
 ORGANIZATION='FNNDSC'
 EMAIL='dev@babyMRI.org'
 
-# Continuous integration: automatically test and build your code.
-# You are advised to review the file .github/workflows/ci.yml
-# https://github.com/FNNDSC/python-chrisapp-template/wiki/Continuous-Integration#use-ci
+# Github Actions: automatically test and build your code.
+# https://github.com/FNNDSC/python-chrisapp-template/wiki/Continuous-Integration
+#
+# These options will fail unless your Github settings are preconfigured.
+# Repositories under github.com/FNNDSC are preconfigured, so these defaults might work.
+# Please review the file .github/workflows/ci.yml before you push it.
 ENABLE_ACTIONS_TEST=yes
 ENABLE_ACTIONS_BUILD=yes
 
