@@ -42,8 +42,7 @@ setup(
     extras_require={
         'none': [],
         'dev': [
-            'pytest~=7.1',
-            'pytest-mock~=3.8'
+            'pytest~=7.1'
         ]
     }
 )
