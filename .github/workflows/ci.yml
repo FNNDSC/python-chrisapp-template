@@ -81,7 +81,7 @@ jobs:
 
           dock_image=$repo:$tag
           echo $dock_image
-          echo "dock_image=dock_image" >> $GITHUB_OUTPUT
+          echo "dock_image=$dock_image" >> $GITHUB_OUTPUT
           echo "repo=$repo" >> $GITHUB_OUTPUT
 
       - uses: actions/checkout@v3
