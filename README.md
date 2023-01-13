@@ -89,13 +89,13 @@ To get started with local command-line usage, use [Apptainer](https://apptainer.
 (a.k.a. Singularity) to run `pl-appname` as a container:
 
 ```shell
-singularity exec docker://fnndsc/pl-appname commandname [--args values...] input/ output/
+apptainer exec docker://fnndsc/pl-appname commandname [--args values...] input/ output/
 ```
 
 To print its available options, run:
 
 ```shell
-singularity exec docker://fnndsc/pl-appname commandname --help
+apptainer exec docker://fnndsc/pl-appname commandname --help
 ```
 
 ## Examples
@@ -107,7 +107,7 @@ First, create the input directory and move input data into it.
 ```shell
 mkdir incoming/ outgoing/
 mv some.dat other.dat incoming/
-singularity exec docker://fnndsc/pl-appname:latest commandname [--args] incoming/ outgoing/
+apptainer exec docker://fnndsc/pl-appname:latest commandname [--args] incoming/ outgoing/
 ```
 
 ## Development
