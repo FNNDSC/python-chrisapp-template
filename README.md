@@ -32,9 +32,11 @@ It is optional to use.
 
 Here are some good, complete examples of _ChRIS_ plugins created from this template.
 
-- https://github.com/FNNDSC/pl-dcm2niix (basic command example)
+- https://github.com/FNNDSC/pl-dcm2niix (basic command wrapper example)
+- <https://github.com/FNNDSC/pl-adapt_object_mesh> (parallelizes a command)
 - https://github.com/FNNDSC/pl-mri-preview (uses [NiBabel](https://nipy.org/nibabel/))
-- https://github.com/FNNDSC/pl-fetal-cp-surface-extract (example using Python package project structure)
+- https://github.com/FNNDSC/pl-pyvista-volume (example using Python package project structure and pytest)
+- https://github.com/FNNDSC/pl-fetal-cp-surface-extract (has a good README.md)
 
 ## What's Inside
 
