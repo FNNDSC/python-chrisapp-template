@@ -32,9 +32,11 @@ It is optional to use.
 
 Here are some good, complete examples of _ChRIS_ plugins created from this template.
 
-- https://github.com/FNNDSC/pl-dcm2niix (basic command example)
+- https://github.com/FNNDSC/pl-dcm2niix (basic command wrapper example)
+- <https://github.com/FNNDSC/pl-adapt_object_mesh> (parallelizes a command)
 - https://github.com/FNNDSC/pl-mri-preview (uses [NiBabel](https://nipy.org/nibabel/))
-- https://github.com/FNNDSC/pl-fetal-cp-surface-extract (example using Python package project structure)
+- https://github.com/FNNDSC/pl-pyvista-volume (example using Python package project structure and pytest)
+- https://github.com/FNNDSC/pl-fetal-cp-surface-extract (has a good README.md)
 
 ## What's Inside
 
@@ -89,13 +91,13 @@ To get started with local command-line usage, use [Apptainer](https://apptainer.
 (a.k.a. Singularity) to run `pl-appname` as a container:
 
 ```shell
-singularity exec docker://fnndsc/pl-appname commandname [--args values...] input/ output/
+apptainer exec docker://fnndsc/pl-appname commandname [--args values...] input/ output/
 ```
 
 To print its available options, run:
 
 ```shell
-singularity exec docker://fnndsc/pl-appname commandname --help
+apptainer exec docker://fnndsc/pl-appname commandname --help
 ```
 
 ## Examples
@@ -107,7 +109,7 @@ First, create the input directory and move input data into it.
 ```shell
 mkdir incoming/ outgoing/
 mv some.dat other.dat incoming/
-singularity exec docker://fnndsc/pl-appname:latest commandname [--args] incoming/ outgoing/
+apptainer exec docker://fnndsc/pl-appname:latest commandname [--args] incoming/ outgoing/
 ```
 
 ## Development
