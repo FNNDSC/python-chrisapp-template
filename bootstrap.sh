@@ -10,7 +10,9 @@
 # CONFIGURATION
 # ========================================
 
+# ----------------------------------------
 # STEP 1. Change these values to your liking.
+# ----------------------------------------
 
 PLUGIN_NAME="$(basename $(dirname $(realpath $0)))"  # name of current directory
 PLUGIN_TITLE='My ChRIS Plugin'
@@ -25,14 +27,31 @@ EMAIL='dev@babyMRI.org'
 # These options will fail unless your Github settings are preconfigured.
 # Repositories under github.com/FNNDSC are preconfigured, so these defaults might work.
 # Please review the file .github/workflows/ci.yml before you push it.
+
+# Automatically test on Github Actions each time you run `git push`
+# If the value is "no" then tests are not performed. There are no side effects.
 ENABLE_ACTIONS_TEST=yes
+# Automatically build images on Github Actions each time you run `git push`,
+# and also publish to https://chrisstore.co each time you run `git push --tags`
+# If the value is "no" then builds will not be automated.
 ENABLE_ACTIONS_BUILD=yes
 
-# STEP 2. Uncomment the line below.
+# WARNING: the default configuration in .github/workflows/ci.yml is to allow for
+# the build to proceed regardless of whether tests pass. To modify this behavior
+# and other advanced features (such as multi-architecture builds such as arm64, ppc64le)
+# you must edit .github/workflows/ci.yml by hand.
+
+
+# ----------------------------------------
+# STEP 2. Uncomment the line where it says READY=yes
+# ----------------------------------------
 
 #READY=yes
 
+# ----------------------------------------
 # STEP 3. Run: ./bootstrap.sh
+# ----------------------------------------
+
 
 if [ "$(uname -o 2> /dev/null)" != 'GNU/Linux' ]; then
   >&2 echo "error: this script only works on GNU/Linux."
