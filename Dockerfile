@@ -16,4 +16,4 @@ COPY . .
 ARG extras_require=none
 RUN pip install ".[${extras_require}]"
 
-CMD ["commandname", "--help"]
+CMD ["commandname"]
