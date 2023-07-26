@@ -156,7 +156,7 @@ sed -e'/^# ChRIS Plugin Title$/'\{ -e:1 -en\;b1 -e\} -ed README.md \
 mv $temp_file README.md
 
 # Dockerfile
-sed "s#WORKDIR /usr/local/src/app#WORKDIR /usr/local/src/$PLUGIN_NAME#" Dockerfile \
+sed "s#ARG SRCDIR=/usr/local/src/app#ARG SRCDIR=/usr/local/src/$PLUGIN_NAME#" Dockerfile \
   | sed "s/org\.opencontainers\.image\.title=\"ChRIS Plugin Title\"/org.opencontainers.image.title=\"$escaped_title\"/" \
   | sed "s/org\.opencontainers\.image\.description=\"A ChRIS plugin that\.\.\.\"/org.opencontainers.image.description=\"$escaped_description\"/" \
   > $temp_file
