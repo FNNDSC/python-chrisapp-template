@@ -194,7 +194,7 @@ mv $temp_file setup.py
 
 # FIGlet over HTTPS, since it's probably not installed locally
 function figlet_wrapper () {
-  curl -fsSG 'https://figlet.chrisproject.org/' --data-urlencode "message=$*" \
+  curl -fsSG 'https://figlet-hosting-of-medical-image-analysis-platform-dcb83b.apps.shift.nerc.mghpcc.org/' --data-urlencode "message=$*" \
     | grep -v '^[[:space:]]*$'
 }
 
