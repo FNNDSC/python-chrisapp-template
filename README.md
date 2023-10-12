@@ -83,8 +83,6 @@ creates ... as output files.
 `pl-appname` is a _[ChRIS](https://chrisproject.org/) plugin_, meaning it can
 run from either within _ChRIS_ or the command-line.
 
-[![Get it from chrisstore.co](https://raw.githubusercontent.com/FNNDSC/ChRIS_store_ui/963938c241636e4c3dc4753ee1327f56cb82d8b5/src/assets/public/badges/light.svg)](https://chrisstore.co/plugin/pl-appname)
-
 ## Local Usage
 
 To get started with local command-line usage, use [Apptainer](https://apptainer.org/)
@@ -167,10 +165,13 @@ docker push docker.io/fnndsc/pl-appname:1.2.3
 ### Get JSON Representation
 
 Run [`chris_plugin_info`](https://github.com/FNNDSC/chris_plugin#usage)
-to produce a JSON description of this plugin, which can be uploaded to a _ChRIS Store_.
+to produce a JSON description of this plugin, which can be uploaded to _ChRIS_.
 
 ```shell
-docker run --rm localhost/fnndsc/pl-appname:dev chris_plugin_info > chris_plugin_info.json
+docker run --rm docker.io/fnndsc/pl-appname:1.2.3 chris_plugin_info -d docker.io/fnndsc/pl-appname:1.2.3 > chris_plugin_info.json
 ```
+
+Intructions on how to upload the plugin to _ChRIS_ can be found here:
+https://chrisproject.org/docs/tutorials/upload_plugin
 
 END README TEMPLATE -->
