@@ -35,7 +35,7 @@ jobs:
       - name: Run program
         run: |
           source venv/bin/activate
-          echo 'on-the-metal test is very testy test test' /tmp/data.txt
+          echo 'on-the-metal test is very testy test test' /tmp/ghaction.txt
           commandname --word 'test' /tmp ./outgoing
 
           if ! [ -e 'outgoing/ghaction.count.txt' ]; then
