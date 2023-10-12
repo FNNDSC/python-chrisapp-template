@@ -22,25 +22,18 @@ jobs:
     if: false  # delete this line to enable automatic testing
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v2
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
       - name: Build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           build-args: extras_require=dev
           context: .
           load: true
           push: false
           tags: "localhost/local/app:dev"
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Run pytest
         run: |
           docker run -v "$GITHUB_WORKSPACE:/app:ro" -w /app localhost/local/app:dev \
@@ -54,44 +47,45 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Get git tag
-        id: git_info
-        if: startsWith(github.ref, 'refs/tags/')
-        run: echo "tag=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
-      - name: Get project info
-        id: determine
-        env:
-          git_tag: ${{ steps.git_info.outputs.tag }}
+      - name: Decide image tags
+        id: info
+        shell: python
         run: |
-          repo="${GITHUB_REPOSITORY,,}"  # to lower case
-          # if build triggered by tag, use tag name
-          tag="${git_tag:-latest}"
+          import os
+          import itertools
+          
+          registries = ['docker.io', 'ghcr.io']
+          repos = ['${{ github.repository }}']
+          if '${{ github.ref_type }}' == 'branch':
+              tags = ['latest']
+          elif '${{ github.ref_type }}' == 'tag':
+              tag = '${{ github.ref_name }}'
+              version = tag[1:] if tag.startswith('v') else tag
+              tags = ['latest', version]
+          else:
+              tags = []
 
-          # if tag is a version number prefixed by 'v', remove the 'v'
-          if [[ "$tag" =~ ^v[0-9].* ]]; then
-            tag="${tag:1}"
-          fi
+          def join_tag(t):
+              registry, repo, tag = t
+              return f'{registry}/{repo}:{tag}'.lower()
 
-          dock_image=$repo:$tag
-          echo $dock_image
-          echo "dock_image=$dock_image" >> $GITHUB_OUTPUT
-          echo "repo=$repo" >> $GITHUB_OUTPUT
+          product = itertools.product(registries, repos, tags)
+          outputs = {
+              'tags_csv' : ','.join(map(join_tag, product)),
+              'push'     : 'true' if tags_csv else 'false',
+              'local_tag': join_tag(('localhost', '${{ github.repository }}', 'latest'))
+          }
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              for k, v in outputs.items():
+                  out.write(f'{k}={v}\n')
 
       - uses: actions/checkout@v3
         # QEMU is used for non-x86_64 builds
-      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-qemu-action@v3
         # buildx adds additional features to docker build
-      - uses: docker/setup-buildx-action@v2
+      - uses: docker/setup-buildx-action@v3
         with:
           driver-opts: network=host
-        # cache slightly improves rebuild time
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
 
         # Here, we want to do the docker build twice:
         # The first build pushes to our local registry for testing.
@@ -102,12 +96,11 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          tags: localhost/${{ steps.determine.outputs.dock_image }}
+          tags: ${{ steps.info.outputs.local_tag }}
           load: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=gha
       # If you have a directory called examples/incoming/ and examples/outgoing/, then
-      # run your ChRIS plugin with no parameters, and asser that it creates all the files
+      # run your ChRIS plugin with no parameters, and assert that it creates all the files
       # which are expected. File contents are not compared.
       - name: Run examples
         id: run_examples
@@ -117,7 +110,7 @@ jobs:
             exit 0
           fi
         
-          dock_image=localhost/${{ steps.determine.outputs.dock_image }}
+          dock_image=${{ steps.info.outputs.local_tag }}
           output_dir=$(mktemp -d)
           cmd=$(docker image inspect -f '{{ (index .Config.Cmd 0) }}' $dock_image)
           docker run --rm -u "$(id -u):$(id -g)" \
@@ -139,13 +132,13 @@ jobs:
 
       - name: Login to DockerHub
         id: dockerhub_login
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -156,23 +149,21 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          tags: |
-            docker.io/${{ steps.determine.outputs.dock_image }}
-            ghcr.io/${{ steps.determine.outputs.dock_image }}
+          tags: ${{ steps.info.outputs.tags_csv }}
           # if non-x86_84 architectures are supported, add them here
           platforms: linux/amd64  #,linux/arm64,linux/ppc64le
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          push: ${{ steps.info.outputs.push }}
+          cache-to: type=gha,mode=max
 
-      - name: Get plugin meta
-        id: pluginmeta
-        run: |
-          repo=${{ steps.determine.outputs.repo }}
-          dock_image=${{ steps.determine.outputs.dock_image }}
-          docker run --rm localhost/$dock_image chris_plugin_info > /tmp/description.json
-          jq < /tmp/description.json  # pretty print in log
-          echo "title=$(jq -r '.title' < /tmp/description.json)" >> $GITHUB_OUTPUT
+      - name: Upload ChRIS Plugin
+        id: upload
+        uses: FNNDSC/upload-chris-plugin@v1
+        with:
+          dock_image: ${{ steps.info.outputs.local_tag }}
+          username: ${{ steps.CHRISPROJECT_USERNAME }}
+          password: ${{ steps.CHRISPROJECT_PASSWORD }}
+          chris_url: https://cube.chrisproject.org/api/v1/
+          compute_names: host,galena
 
       - name: Update DockerHub description
         uses: peter-evans/dockerhub-description@v3
@@ -180,18 +171,5 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          short-description: ${{ steps.pluginmeta.outputs.title }}
+          short-description: ${{ steps.upload.outputs.title }}
           readme-filepath: ./README.md
-          repository: ${{ steps.determine.outputs.repo }}
-
-      - name: Upload to ChRIS Store
-        # only upload to ChRIS Store if this is a tagged release
-        if: steps.git_info.outcome != 'skipped'
-        uses: FNNDSC/chrisstore-action@master
-        with:
-          descriptor_file: /tmp/description.json
-          auth: ${{ secrets.CHRIS_STORE_USER }}
-          ## Optional ChRIS backend admin information
-          # chris_admin_auth: ${{ secrets.CUBE_CHRISPROJECT_ORG_ADMIN_USER }}
-          # chris_admin_url: https://cube.chrisproject.org/chris-admin/api/v1/
-          # compute_resources: host,moc  # comma-separated list of names
