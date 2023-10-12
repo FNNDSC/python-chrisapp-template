@@ -39,6 +39,7 @@ jobs:
           commandname --word 'test' /tmp ./outgoing
 
           if ! [ -e 'outgoing/ghaction.count.txt' ]; then
+            echo "Contents of outgoing: " outgoing/*
             echo "::error ::File outgoing/ghaction.count.txt was not created."
           fi
 
