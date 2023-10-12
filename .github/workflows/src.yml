@@ -35,13 +35,16 @@ jobs:
       - name: Run program
         run: |
           source venv/bin/activate
-          echo 'on-the-metal test is very testy test test' /tmp/ghaction.txt
-          commandname --word 'test' /tmp ./outgoing
+          mkdir /tmp/incoming
+          echo 'on-the-metal test is very testy test test' > /tmp/incoming/ghaction.txt
+          commandname --word 'test' /tmp/incoming /tmp/outgoing
 
-          if ! [ -e 'outgoing/ghaction.count.txt' ]; then
-            echo "Contents of outgoing: " outgoing/*
+          if ! [ -e '/tmp/outgoing/ghaction.count.txt' ]; then
+            echo "Contents of /tmp/outgoing: " /tmp/outgoing/*
             echo "::error ::File outgoing/ghaction.count.txt was not created."
           fi
+
+          rm -rvf /tmp/incoming /tmp/outgoing
 
   integration:
     name: Integration tests
