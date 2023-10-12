@@ -70,8 +70,9 @@ jobs:
               return f'{registry}/{repo}:{tag}'.lower()
 
           product = itertools.product(registries, repos, tags)
+          tags_csv = ','.join(map(join_tag, product))
           outputs = {
-              'tags_csv' : ','.join(map(join_tag, product)),
+              'tags_csv' : tags_csv,
               'push'     : 'true' if tags_csv else 'false',
               'local_tag': join_tag(('localhost', '${{ github.repository }}', 'latest'))
           }
