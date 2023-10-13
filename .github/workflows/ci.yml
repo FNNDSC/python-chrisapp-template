@@ -162,8 +162,8 @@ jobs:
         uses: FNNDSC/upload-chris-plugin@v1
         with:
           dock_image: ${{ steps.info.outputs.local_tag }}
-          username: ${{ steps.CHRISPROJECT_USERNAME }}
-          password: ${{ steps.CHRISPROJECT_PASSWORD }}
+          username: ${{ secrets.CHRISPROJECT_USERNAME }}
+          password: ${{ secrets.CHRISPROJECT_PASSWORD }}
           chris_url: https://cube.chrisproject.org/api/v1/
           compute_names: host,galena
 
