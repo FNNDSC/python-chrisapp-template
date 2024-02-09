@@ -85,7 +85,7 @@ jobs:
               for k, v in outputs.items():
                   out.write(f'{k}={v}\n')
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         # QEMU is used for non-x86_64 builds
       - uses: docker/setup-qemu-action@v3
         # buildx adds additional features to docker build
@@ -150,7 +150,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         if: (github.event_name == 'push' || github.event_name == 'release')
         with:
           context: .
