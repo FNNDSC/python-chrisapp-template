@@ -170,7 +170,7 @@ jobs:
           username: ${{ secrets.CHRISPROJECT_USERNAME }}
           password: ${{ secrets.CHRISPROJECT_PASSWORD }}
           chris_url: https://cube.chrisproject.org/api/v1/
-          compute_names: host,galena
+          compute_names: NERC
 
       - name: Update DockerHub description
         if: steps.upload.outcome == 'success'
