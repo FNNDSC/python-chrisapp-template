@@ -11,13 +11,13 @@ on:
 jobs:
   local:
     name: Local test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: [ '3.8.2', '3.9', '3.10', '3.11', '3.12' ]
+        python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Configure git
@@ -50,7 +50,7 @@ jobs:
     name: Integration tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Edit code
         run: |
           git config --global user.email "dev@babyMRI.org"
@@ -103,7 +103,7 @@ jobs:
     needs: [ local, integration ]
     steps:
     - name: Git checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         persist-credentials: false
         fetch-depth: 0
@@ -134,7 +134,7 @@ jobs:
 
         git commit --no-edit
     - name: Push to main
-      uses: ad-m/github-push-action@552c074ed701137ebd2bf098e70c394ca293e87f
+      uses: ad-m/github-push-action@4cc74773234f74829a8c21bc4d69dd4be9cfa599 #v1.1.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
